@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="760" viewBox="0 0 1500 760">
+<defs><style>
+text{font-family:Arial,sans-serif;fill:#111827}.title{font-size:34px;font-weight:700}.h{font-size:19px;font-weight:700}.s{font-size:15px}.box{fill:#f8fafc;stroke:#334155;stroke-width:2;rx:12}.step{fill:#e0f2fe}.policy{fill:#fef3c7}.fabric{fill:#dcfce7}.line{stroke:#334155;stroke-width:3;marker-end:url(#a)}
+</style><marker id="a" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#334155"/></marker></defs>
+<rect width="1500" height="760" fill="white"/>
+<text x="60" y="55" class="title">ACI Packet Walk — WEB to APP TCP/8443</text>
+
+<rect x="40" y="210" width="180" height="100" class="box"/><text x="130" y="248" text-anchor="middle" class="h">WEB</text><text x="130" y="276" text-anchor="middle" class="s">10.10.10.10</text><text x="130" y="298" text-anchor="middle" class="s">VLAN 110</text>
+<rect x="270" y="180" width="220" height="160" class="box step"/><text x="380" y="220" text-anchor="middle" class="h">Leaf-201</text><text x="380" y="252" text-anchor="middle" class="s">1. EPG classify</text><text x="380" y="278" text-anchor="middle" class="s">2. VRF route lookup</text><text x="380" y="304" text-anchor="middle" class="s">3. dst location lookup</text><text x="380" y="330" text-anchor="middle" class="s">4. zoning policy</text>
+<rect x="550" y="180" width="240" height="160" class="box policy"/><text x="670" y="220" text-anchor="middle" class="h">Policy Decision</text><text x="670" y="252" text-anchor="middle" class="s">SRC pcTag = WEB</text><text x="670" y="278" text-anchor="middle" class="s">DST pcTag = APP</text><text x="670" y="304" text-anchor="middle" class="s">TCP dst 8443</text><text x="670" y="330" text-anchor="middle" class="s">Permit</text>
+<rect x="850" y="180" width="240" height="160" class="box fabric"/><text x="970" y="220" text-anchor="middle" class="h">Fabric Transport</text><text x="970" y="252" text-anchor="middle" class="s">VXLAN encapsulation</text><text x="970" y="278" text-anchor="middle" class="s">IS-IS TEP reachability</text><text x="970" y="304" text-anchor="middle" class="s">ECMP via Spine</text><text x="970" y="330" text-anchor="middle" class="s">COOP assists location</text>
+<rect x="1150" y="180" width="200" height="160" class="box step"/><text x="1250" y="220" text-anchor="middle" class="h">Leaf-202</text><text x="1250" y="252" text-anchor="middle" class="s">VXLAN decap</text><text x="1250" y="278" text-anchor="middle" class="s">Local endpoint lookup</text><text x="1250" y="304" text-anchor="middle" class="s">Egress VLAN 120</text>
+<rect x="1380" y="210" width="100" height="100" class="box"/><text x="1430" y="248" text-anchor="middle" class="h">APP</text><text x="1430" y="278" text-anchor="middle" class="s">10.10.20.10</text>
+
+<line x1="220" y1="260" x2="270" y2="260" class="line"/>
+<line x1="490" y1="260" x2="550" y2="260" class="line"/>
+<line x1="790" y1="260" x2="850" y2="260" class="line"/>
+<line x1="1090" y1="260" x2="1150" y2="260" class="line"/>
+<line x1="1350" y1="260" x2="1380" y2="260" class="line"/>
+
+<text x="60" y="440" class="h">Troubleshooting evidence</text>
+<text x="60" y="480" class="s">Endpoint: show endpoint ip &lt;IP&gt;</text>
+<text x="60" y="515" class="s">Route: show ip route &lt;DST&gt; vrf &lt;TENANT:VRF&gt;</text>
+<text x="60" y="550" class="s">Underlay: show isis adjacency</text>
+<text x="60" y="585" class="s">COOP: show coop internal info ip-db</text>
+<text x="60" y="620" class="s">Contract: show zoning-rule / show zoning-filter filter &lt;ID&gt;</text>
+<text x="60" y="655" class="s">Egress: show interface &lt;INTERFACE&gt;</text>
+
+<text x="800" y="470" class="h">Core principle</text>
+<text x="800" y="510" class="s">Route answers: Where should the packet go?</text>
+<text x="800" y="545" class="s">Contract answers: Is this policy-class pair allowed?</text>
+<text x="800" y="580" class="s">Both must succeed for inter-EPG traffic.</text>
+</svg>
