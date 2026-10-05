@@ -1,0 +1,85 @@
+! ============================================================
+! Nexus 9000 Standalone NX-OS vPC reference skeleton
+! Validate interface numbers, IPs, supported knobs, and release.
+! ============================================================
+
+! ---------- N9K-1 ----------
+
+feature lacp
+feature vpc
+
+vpc domain 10
+  peer-keepalive destination 192.0.2.12 source 192.0.2.11 vrf management
+  peer-gateway
+  ip arp synchronize
+
+interface ethernet1/49-50
+  description VPC-PEER-LINK-MEMBERS
+  channel-group 1 mode active
+  no shutdown
+
+interface port-channel1
+  description VPC-PEER-LINK
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 110,120
+  spanning-tree port type network
+  vpc peer-link
+
+interface ethernet1/10
+  description SERVER-LINK-A
+  channel-group 10 mode active
+  no shutdown
+
+interface port-channel10
+  description SERVER-VPC
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 110,120
+  vpc 10
+
+! ---------- N9K-2 ----------
+
+feature lacp
+feature vpc
+
+vpc domain 10
+  peer-keepalive destination 192.0.2.11 source 192.0.2.12 vrf management
+  peer-gateway
+  ip arp synchronize
+
+interface ethernet1/49-50
+  description VPC-PEER-LINK-MEMBERS
+  channel-group 1 mode active
+  no shutdown
+
+interface port-channel1
+  description VPC-PEER-LINK
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 110,120
+  spanning-tree port type network
+  vpc peer-link
+
+interface ethernet1/10
+  description SERVER-LINK-B
+  channel-group 10 mode active
+  no shutdown
+
+interface port-channel10
+  description SERVER-VPC
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 110,120
+  vpc 10
+
+! ---------- Verification ----------
+
+show vpc
+show vpc peer-keepalive
+show vpc consistency-parameters global
+show vpc consistency-parameters interface port-channel10
+show port-channel summary
+show lacp neighbor
+show spanning-tree vlan 110
+show mac address-table vlan 110
