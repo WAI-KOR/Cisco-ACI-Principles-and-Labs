@@ -1,0 +1,84 @@
+! ============================================================
+! Nexus 9000 VXLAN EVPN reference skeleton
+! NX-OS 10.6(x) concept example.
+! This is NOT a universal copy/paste production config.
+! Platform, topology, AS design, route-target and feature support
+! must be validated for the actual deployment.
+! ============================================================
+
+feature bgp
+feature interface-vlan
+feature nv overlay
+feature vn-segment-vlan-based
+nv overlay evpn
+
+! Underlay loopback / router-id
+interface loopback0
+  ip address 10.255.0.11/32
+
+! VTEP loopback
+interface loopback1
+  ip address 10.255.1.11/32
+
+! Local access VLAN mapped to L2 VNI
+vlan 110
+  vn-segment 10110
+
+! Tenant VRF / L3 VNI example
+vrf context PROD
+  vni 50000
+  rd auto
+  address-family ipv4 unicast
+    route-target both auto
+    route-target both auto evpn
+
+vlan 500
+  vn-segment 50000
+
+! Global anycast gateway MAC - choose one value consistently
+fabric forwarding anycast-gateway-mac 0001.0001.0001
+
+interface vlan110
+  no shutdown
+  vrf member PROD
+  ip address 10.10.10.1/24
+  fabric forwarding mode anycast-gateway
+
+interface vlan500
+  no shutdown
+  vrf member PROD
+  ip forward
+
+interface nve1
+  no shutdown
+  host-reachability protocol bgp
+  source-interface loopback1
+  member vni 10110
+    ingress-replication protocol bgp
+  member vni 50000 associate-vrf
+
+router bgp 65001
+  router-id 10.255.0.11
+
+  address-family l2vpn evpn
+
+  ! Replace with the actual EVPN spine/RR peer.
+  neighbor 10.255.0.1
+    remote-as 65001
+    update-source loopback0
+    address-family l2vpn evpn
+      send-community
+      send-community extended
+
+! Underlay routing must make remote VTEP loopbacks reachable.
+! Configure OSPF/IS-IS/eBGP underlay separately.
+
+! Verification
+show ip route 10.255.1.12
+show bgp l2vpn evpn summary
+show nve interface
+show nve peers
+show nve vni
+show bgp l2vpn evpn
+show l2route evpn mac all
+show mac address-table
