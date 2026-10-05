@@ -1,0 +1,17 @@
+# Contract concept example
+# Validate exact APIC 6.2(x) syntax before use.
+
+Tenant: LAB
+Consumer EPG: EPG-WEB
+Provider EPG: EPG-APP
+Contract: CT-WEB-APP
+Subject: S-WEB-APP
+Filter: F-TCP-8443
+Entry: TCP destination port 8443
+
+# Verification on the traffic-handling Leaf:
+show zoning-rule
+show zoning-filter filter <FILTER_ID>
+
+# Principle:
+# Contract intent on APIC must compile into zoning/filter state on Leaf.
