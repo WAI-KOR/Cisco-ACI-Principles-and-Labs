@@ -1,0 +1,62 @@
+! Nexus 9000 NX-OS basic L2/L3 reference
+! Validate commands against the actual PID and NX-OS release.
+
+hostname N9K-01
+
+feature interface-vlan
+feature lacp
+feature ospf
+feature bgp
+
+vlan 110
+  name WEB
+
+vlan 120
+  name APP
+
+interface ethernet1/10
+  description WEB-SERVER
+  switchport
+  switchport mode access
+  switchport access vlan 110
+  spanning-tree port type edge
+  no shutdown
+
+interface ethernet1/20
+  description APP-SERVER
+  switchport
+  switchport mode access
+  switchport access vlan 120
+  spanning-tree port type edge
+  no shutdown
+
+interface ethernet1/47
+  description L3-UPLINK
+  no switchport
+  ip address 172.16.0.0/31
+  no shutdown
+
+interface vlan110
+  description WEB-GW
+  ip address 10.10.10.1/24
+  no shutdown
+
+interface vlan120
+  description APP-GW
+  ip address 10.10.20.1/24
+  no shutdown
+
+router ospf 10
+  router-id 10.255.0.1
+
+interface ethernet1/47
+  ip router ospf 10 area 0.0.0.0
+
+! Verification
+show feature
+show vlan brief
+show interface status
+show mac address-table
+show ip interface brief
+show ip ospf neighbors
+show ip route
