@@ -1,0 +1,66 @@
+NEXUS 9000 NX-OS UPGRADE CHECKLIST
+===================================
+
+[1] Identify
+show version
+show module
+show inventory
+show feature
+
+[2] Health baseline
+show environment
+show system resources
+show interface status
+show interface counters errors
+
+[3] Feature state
+show port-channel summary
+show vpc
+show ip ospf neighbors
+show bgp sessions
+show nve peers
+show nve vni
+show bgp l2vpn evpn summary
+
+Use only the checks relevant to the actual deployment.
+
+[4] Storage
+dir bootflash:
+
+[5] Copy image
+copy scp://<USER>@<SERVER>/<IMAGE> bootflash:<IMAGE>
+
+[6] Integrity
+show file bootflash:<IMAGE> md5sum
+show file bootflash:<IMAGE> sha256sum
+show file bootflash:<IMAGE> sha512sum
+
+Compare with Cisco Software Download published hash.
+
+[7] Upgrade path
+Check:
+- target release notes
+- Nexus 9000/3000 Upgrade and ISSU Matrix
+- platform/PID support
+- feature compatibility
+
+[8] Impact
+show install all impact nxos bootflash:<IMAGE>
+
+[9] Save
+copy running-config startup-config
+
+[10] Install
+install all nxos bootflash:<IMAGE>
+
+Use non-disruptive/ISSU options ONLY when Cisco documents the
+source/target/platform/feature combination as supported.
+
+[11] Post-check
+show install all status
+show version
+show module
+show environment
+show feature
+
+Then compare all feature-specific operational states with the baseline.
