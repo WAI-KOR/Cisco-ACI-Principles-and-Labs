@@ -1,0 +1,29 @@
+# OSPF L3Out concept checklist
+
+Tenant: LAB
+VRF: VRF-LAB
+L3Out: L3OUT-OSPF
+Protocol: OSPFv2
+Area: 0.0.0.0
+Border Leaf: 201
+Router-ID: 201.201.201.201
+Interface: eth1/48
+Leaf IP: 172.16.0.0/31
+External Router IP: 172.16.0.1/31
+External EPG: EXT-EPG
+
+Required policy checks:
+1. L3 Domain associated
+2. Logical Node Profile includes Border Leaf
+3. Logical Interface Profile uses intended path
+4. OSPF area/interface parameters match external router
+5. External EPG has intended security classification subnet
+6. Internal EPG <-> External EPG Contract exists
+7. Internal BD subnet advertisement scope is correct when advertisement is required
+8. Route-control policy does not suppress expected prefix
+9. External router has return route
+
+Leaf verification:
+show ip ospf neighbors vrf LAB:VRF-LAB
+show ip route vrf LAB:VRF-LAB
+show zoning-rule
