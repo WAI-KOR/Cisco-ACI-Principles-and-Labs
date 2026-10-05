@@ -1,0 +1,47 @@
+ACI VERIFICATION CHEAT SHEET
+============================
+
+[APIC]
+show fabric membership
+show endpoint ip <IP>
+show endpoint mac <MAC>
+moquery -c fvTenant
+moquery -c fvAEPg
+moquery -c fvCEp
+moquery -c faultInst
+acidiag fnvread
+
+[LEAF - ACCESS / ENDPOINT]
+show interface status
+show interface ethernet 1/10
+show endpoint ip <IP>
+show endpoint mac <MAC>
+show port-channel summary
+show vpc
+show lacp counters
+
+[LEAF - ROUTING / POLICY]
+show ip route <IP> vrf <TENANT:VRF>
+show zoning-rule
+show zoning-filter filter <FILTER_ID>
+show isis adjacency
+
+[SPINE]
+show isis adjacency
+show coop internal info ip-db
+
+[L3OUT BORDER LEAF]
+show ip route vrf <TENANT:VRF>
+show ip ospf neighbors vrf <TENANT:VRF>
+show zoning-rule
+
+TROUBLESHOOT ORDER
+------------------
+Physical
+-> Access Policy
+-> Endpoint Learning
+-> Route / VRF / TEP
+-> COOP
+-> Contract / Zoning
+-> L3Out
+-> Packet-level analysis
