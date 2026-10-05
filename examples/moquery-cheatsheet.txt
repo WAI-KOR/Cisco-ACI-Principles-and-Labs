@@ -1,0 +1,18 @@
+# APIC Managed Object query cheat sheet
+
+moquery -c fvTenant
+moquery -c fvCtx
+moquery -c fvBD
+moquery -c fvAEPg
+moquery -c fvCEp
+moquery -c vzBrCP
+moquery -c vzFilter
+moquery -c l3extOut
+moquery -c l3extInstP
+moquery -c faultInst
+
+# Specific DN
+moquery -d uni/tn-LAB
+
+# Learning principle:
+# GUI object -> MO class -> DN -> relation -> deployed switch state
